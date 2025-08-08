@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { Plus, Trash2, Presentation as PresentationIcon, ArrowRight, Wand2 } from 'lucide-react';
+import { Plus, Trash2, Presentation as PresentationIcon, ArrowRight, Wand2, ArrowUp, ArrowDown } from 'lucide-react';
 import type { Slide } from '@/lib/types';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { AiSuggestions } from '@/components/ai-suggestions';
+import { cn } from '@/lib/utils';
 
 const initialSlides: Slide[] = [
   {
@@ -84,6 +85,19 @@ export default function EditorPage() {
   const updateSlide = (id: string, updates: Partial<Slide>) => {
     setSlides(slides.map(s => (s.id === id ? { ...s, ...updates } : s)));
   };
+
+  const moveSlide = (id: string, direction: 'up' | 'down') => {
+    const fromIndex = slides.findIndex(s => s.id === id);
+    if (fromIndex === -1) return;
+
+    const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1;
+    if (toIndex < 0 || toIndex >= slides.length) return;
+
+    const newSlides = [...slides];
+    const [movedSlide] = newSlides.splice(fromIndex, 1);
+    newSlides.splice(toIndex, 0, movedSlide);
+    setSlides(newSlides);
+  };
   
   if (!isMounted) {
     return null; // or a loading spinner
@@ -112,35 +126,42 @@ export default function EditorPage() {
             <ScrollArea className="flex-1">
               <div className="space-y-2 p-4 pt-0">
                 {slides.map((slide, index) => (
-                  <div key={slide.id} className="group relative">
+                  <div key={slide.id} className="group relative pr-16">
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-left h-auto py-3"
+                      className={cn("w-full justify-start text-left h-auto py-3", slide.id === activeSlideId && "bg-muted hover:bg-muted")}
                       onClick={() => setActiveSlideId(slide.id)}
-                      data-active={slide.id === activeSlideId}
                     >
                       <span className="font-semibold text-primary mr-3">{index + 1}.</span>
                       <span className="truncate flex-1">{slide.title}</span>
                     </Button>
-                     <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 opacity-0 group-hover:opacity-100">
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete this slide.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => deleteSlide(slide.id)}>Delete</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => moveSlide(slide.id, 'up')} disabled={index === 0}>
+                        <ArrowUp className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => moveSlide(slide.id, 'down')} disabled={index === slides.length - 1}>
+                        <ArrowDown className="h-4 w-4" />
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-7 w-7">
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will permanently delete this slide.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => deleteSlide(slide.id)}>Delete</AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -160,7 +181,7 @@ export default function EditorPage() {
               <CardHeader className="flex-row items-center justify-between">
                 <CardTitle>Edit Slide</CardTitle>
                 <AiSuggestions
-                  topic="how to get from an idea to a prototype using firebase studio"
+                  topic={activeSlide.title}
                   onSuggestionSelect={(content) => updateSlide(activeSlide.id, { content })}
                 />
               </CardHeader>
@@ -173,7 +194,7 @@ export default function EditorPage() {
                     className="text-lg font-semibold"
                   />
                   <Textarea
-                    placeholder="Slide Content..."
+                    placeholder="Slide Content... (Markdown is supported!)"
                     value={activeSlide.content}
                     onChange={e => updateSlide(activeSlide.id, { content: e.target.value })}
                     className="flex-1 resize-none text-base"

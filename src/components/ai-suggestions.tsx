@@ -51,9 +51,17 @@ export function AiSuggestions({ topic, onSuggestionSelect }: AiSuggestionsProps)
     onSuggestionSelect(suggestion);
     setIsOpen(false);
   };
+  
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      setSuggestions([]);
+      setAdditionalContext('');
+    }
+  };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline">
           <Wand2 className="mr-2 h-4 w-4" />
@@ -64,7 +72,7 @@ export function AiSuggestions({ topic, onSuggestionSelect }: AiSuggestionsProps)
         <DialogHeader>
           <DialogTitle>AI Content Suggestions</DialogTitle>
           <DialogDescription>
-            Let AI help you brainstorm ideas for your slide content based on the presentation topic. You can also provide additional context.
+            Let AI help you brainstorm ideas for your slide content based on {"'"}<b>{topic}</b>{"'"}. You can also provide additional context.
           </DialogDescription>
         </DialogHeader>
 
