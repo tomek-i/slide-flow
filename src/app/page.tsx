@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { Plus, Trash2, Presentation as PresentationIcon, ArrowRight, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, Trash2, Presentation as PresentationIcon, ArrowRight, GripVertical } from 'lucide-react';
+import { Reorder } from 'framer-motion';
 import type { Slide } from '@/lib/types';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { Button } from '@/components/ui/button';
@@ -84,19 +85,6 @@ export default function EditorPage() {
   const updateSlide = (id: string, updates: Partial<Slide>) => {
     setSlides(slides.map(s => (s.id === id ? { ...s, ...updates } : s)));
   };
-
-  const moveSlide = (id: string, direction: 'up' | 'down') => {
-    const fromIndex = slides.findIndex(s => s.id === id);
-    if (fromIndex === -1) return;
-
-    const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1;
-    if (toIndex < 0 || toIndex >= slides.length) return;
-
-    const newSlides = [...slides];
-    const [movedSlide] = newSlides.splice(fromIndex, 1);
-    newSlides.splice(toIndex, 0, movedSlide);
-    setSlides(newSlides);
-  };
   
   if (!isMounted) {
     return null; // or a loading spinner
@@ -123,47 +111,50 @@ export default function EditorPage() {
               <h2 className="text-lg font-semibold">Slides</h2>
             </div>
             <ScrollArea className="flex-1">
-              <div className="space-y-2 p-4 pt-0">
+              <Reorder.Group axis="y" values={slides} onReorder={setSlides} className="space-y-2 p-4 pt-0">
                 {slides.map((slide, index) => (
-                  <div key={slide.id} className="group relative">
-                    <Button
-                      variant="ghost"
-                      className={cn("w-full justify-start text-left h-auto py-3 pr-20", slide.id === activeSlideId && "bg-muted hover:bg-muted")}
-                      onClick={() => setActiveSlideId(slide.id)}
-                    >
-                      <span className="font-semibold text-primary mr-3">{index + 1}.</span>
-                      <span className="truncate flex-1">{slide.title}</span>
-                    </Button>
-                    <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center opacity-0 group-hover:opacity-100 transition-opacity bg-muted z-10 rounded-md">
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveSlide(slide.id, 'up')} disabled={index === 0}>
-                        <ArrowUp className="h-4 w-4" />
+                  <Reorder.Item
+                    key={slide.id}
+                    value={slide}
+                    className="group relative bg-card rounded-md"
+                  >
+                    <div className="flex items-center">
+                      <div className="px-2 cursor-grab text-muted-foreground hover:text-foreground">
+                        <GripVertical className="h-5 w-5" />
+                      </div>
+                      <Button
+                        variant="ghost"
+                        className={cn("w-full justify-start text-left h-auto py-3 pr-12", slide.id === activeSlideId && "bg-muted hover:bg-muted")}
+                        onClick={() => setActiveSlideId(slide.id)}
+                      >
+                        <span className="font-semibold text-primary mr-3">{index + 1}.</span>
+                        <span className="truncate flex-1">{slide.title}</span>
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveSlide(slide.id, 'down')} disabled={index === slides.length - 1}>
-                        <ArrowDown className="h-4 w-4" />
-                      </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action cannot be undone. This will permanently delete this slide.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => deleteSlide(slide.id)}>Delete</AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                      <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center opacity-0 group-hover:opacity-100 transition-opacity bg-muted z-10 rounded-md">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete this slide.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => deleteSlide(slide.id)}>Delete</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     </div>
-                  </div>
+                  </Reorder.Item>
                 ))}
-              </div>
+              </Reorder.Group>
             </ScrollArea>
             <div className="p-4 mt-auto border-t">
               <Button className="w-full" onClick={addSlide}>
