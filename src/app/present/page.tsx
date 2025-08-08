@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -6,8 +7,42 @@ import { Presentation } from '@/components/presentation';
 import type { Slide } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
+const initialSlides: Slide[] = [
+  {
+    id: '1',
+    title: 'From Idea to Prototype',
+    content: 'A guide to using Firebase Studio for rapid development.',
+  },
+  {
+    id: '2',
+    title: 'What is Firebase Studio?',
+    content: 'An AI-assisted development environment to quickly build and deploy web application prototypes.',
+  },
+  {
+    id: '3',
+    title: 'The Core Workflow',
+    content: '1. **Describe:** Explain your app idea in plain English.\n2. **Refine:** Collaborate with AI to tweak the UI and functionality.\n3. **Deploy:** Go live with one click on Firebase Hosting.',
+  },
+  {
+    id: '4',
+    title: 'AI-Powered Features',
+    content: '- UI Generation\n- Component Scaffolding\n- Content Suggestions\n- Data Schema Creation',
+  },
+  {
+    id: '5',
+    title: 'Beyond the Prototype',
+    content: "A prototype is for learning and validation. It's not production code. Use the insights gained to build a robust V1.",
+  },
+  {
+    id: '6',
+    title: 'Thank You',
+    content: 'Questions?',
+  },
+];
+
+
 export default function PresentPage() {
-  const [slides] = useLocalStorage<Slide[]>('slides', []);
+  const [slides] = useLocalStorage<Slide[]>('slides', initialSlides);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
