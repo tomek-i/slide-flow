@@ -80,7 +80,7 @@ export function Presentation({ slides }: PresentationProps) {
   return (
     <div
       ref={containerRef}
-      className="relative h-screen w-screen bg-background"
+      className="relative h-screen w-screen bg-background presentation-background"
       onMouseMove={handleMouseMove}
     >
       <Carousel setApi={setApi} className="h-full w-full">
@@ -93,13 +93,13 @@ export function Presentation({ slides }: PresentationProps) {
         </CarouselContent>
         <div className={cn("absolute inset-x-0 bottom-10 transition-opacity duration-300", showControls ? "opacity-100" : "opacity-0 pointer-events-none")}>
             <div className="flex items-center justify-center gap-4">
+                 <CarouselPrevious className="static translate-y-0" />
                 <p className="text-sm text-muted-foreground">
                     Slide {current} of {count}
                 </p>
+                <CarouselNext className="static translate-y-0" />
             </div>
         </div>
-        <CarouselPrevious className={cn("absolute left-4 top-1/2 -translate-y-1/2 transition-opacity duration-300", showControls ? "opacity-100" : "opacity-0 pointer-events-none")} />
-        <CarouselNext className={cn("absolute right-4 top-1/2 -translate-y-1/2 transition-opacity duration-300", showControls ? "opacity-100" : "opacity-0 pointer-events-none")} />
       </Carousel>
 
       <div className={cn("absolute top-4 right-4 flex items-center gap-2 transition-opacity duration-300", showControls ? "opacity-100" : "opacity-0 pointer-events-none")}>

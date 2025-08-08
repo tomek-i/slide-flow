@@ -69,4 +69,10 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .presentation-background {
+    @apply bg-gradient-to-br from-primary/10 via-background to-accent/10;
+  }
+  .dark .presentation-background {
+    @apply bg-gradient-to-br from-primary/20 via-background to-accent/20;
+  }
 }
