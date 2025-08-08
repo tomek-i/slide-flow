@@ -134,7 +134,7 @@ export default function EditorPage() {
                       <span className="font-semibold text-primary mr-3">{index + 1}.</span>
                       <span className="truncate flex-1">{slide.title}</span>
                     </Button>
-                    <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center opacity-0 group-hover:opacity-100 transition-opacity bg-transparent z-10">
+                    <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center opacity-0 group-hover:opacity-100 transition-opacity bg-background z-10">
                       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => moveSlide(slide.id, 'up')} disabled={index === 0}>
                         <ArrowUp className="h-4 w-4" />
                       </Button>
