@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from './ui/scroll-area';
+import { Textarea } from './ui/textarea';
+import { Label } from './ui/label';
 
 interface AiSuggestionsProps {
   topic: string;
@@ -24,13 +26,14 @@ export function AiSuggestions({ topic, onSuggestionSelect }: AiSuggestionsProps)
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [additionalContext, setAdditionalContext] = useState('');
   const { toast } = useToast();
 
   const handleGenerate = async () => {
     setIsLoading(true);
     setSuggestions([]);
     try {
-      const result = await suggestSlideContent({ topic });
+      const result = await suggestSlideContent({ topic, additionalContext });
       setSuggestions(result.suggestions);
     } catch (error) {
       console.error('AI suggestion error:', error);
@@ -61,9 +64,20 @@ export function AiSuggestions({ topic, onSuggestionSelect }: AiSuggestionsProps)
         <DialogHeader>
           <DialogTitle>AI Content Suggestions</DialogTitle>
           <DialogDescription>
-            Let AI help you brainstorm ideas for your slide content based on the presentation topic.
+            Let AI help you brainstorm ideas for your slide content based on the presentation topic. You can also provide additional context.
           </DialogDescription>
         </DialogHeader>
+
+        <div className="grid gap-2">
+            <Label htmlFor="additional-context">Additional Context (Optional)</Label>
+            <Textarea
+              id="additional-context"
+              placeholder="e.g., The target audience is beginner developers."
+              value={additionalContext}
+              onChange={(e) => setAdditionalContext(e.target.value)}
+            />
+          </div>
+
         <div className="py-4">
           <Button onClick={handleGenerate} disabled={isLoading} className="w-full">
             {isLoading ? (

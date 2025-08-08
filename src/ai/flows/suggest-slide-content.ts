@@ -4,7 +4,7 @@
  * @fileOverview Provides AI-powered slide content suggestions based on a given topic.
  *
  * - suggestSlideContent -  A function that generates slide content suggestions.
- * - SuggestSlideContentInput - The input type for suggestSlideContent.
+ * - SuggestSlideContentInput - The input type for suggestSlidecontent.
  * - SuggestSlideContentOutput - The output type for suggestSlideContent.
  */
 
@@ -13,6 +13,10 @@ import {z} from 'genkit';
 
 const SuggestSlideContentInputSchema = z.object({
   topic: z.string().describe('The topic for which to generate slide content suggestions.'),
+  additionalContext: z
+    .string()
+    .optional()
+    .describe('Optional additional context to refine the suggestions.'),
 });
 
 export type SuggestSlideContentInput = z.infer<typeof SuggestSlideContentInputSchema>;
@@ -38,6 +42,9 @@ const prompt = ai.definePrompt({
   Return the suggestions as a JSON array of strings.
 
   Topic: {{{topic}}}
+  {{#if additionalContext}}
+  Additional Context: {{{additionalContext}}}
+  {{/if}}
 
   Suggestions:`,
 });
