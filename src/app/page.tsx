@@ -125,16 +125,16 @@ export default function EditorPage() {
             <ScrollArea className="flex-1">
               <div className="space-y-2 p-4 pt-0">
                 {slides.map((slide, index) => (
-                  <div key={slide.id} className="group relative">
+                  <div key={slide.id} className="group relative flex items-center">
                     <Button
                       variant="ghost"
-                      className={cn("w-full justify-start text-left h-auto py-3 pr-16", slide.id === activeSlideId && "bg-muted hover:bg-muted")}
+                      className={cn("w-full justify-start text-left h-auto py-3", slide.id === activeSlideId && "bg-muted hover:bg-muted")}
                       onClick={() => setActiveSlideId(slide.id)}
                     >
                       <span className="font-semibold text-primary mr-3">{index + 1}.</span>
                       <span className="truncate flex-1">{slide.title}</span>
                     </Button>
-                    <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center opacity-0 group-hover:opacity-100 transition-opacity bg-background">
+                    <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center opacity-0 group-hover:opacity-100 transition-opacity bg-transparent z-10">
                       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => moveSlide(slide.id, 'up')} disabled={index === 0}>
                         <ArrowUp className="h-4 w-4" />
                       </Button>
