@@ -15,6 +15,7 @@ import { SlideComponent } from '@/components/slide';
 import { Button } from '@/components/ui/button';
 import { Maximize, Minimize, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Confetti from './confetti';
 
 interface PresentationProps {
   slides: Slide[];
@@ -77,12 +78,15 @@ export function Presentation({ slides }: PresentationProps) {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
+  const isThankYouSlide = slides[current -1]?.title.toLowerCase().includes('thank you');
+
   return (
     <div
       ref={containerRef}
       className="relative h-screen w-screen bg-background presentation-background"
       onMouseMove={handleMouseMove}
     >
+      {isThankYouSlide && <Confetti />}
       <Carousel setApi={setApi} className="h-full w-full">
         <CarouselContent>
           {slides.map(slide => (
