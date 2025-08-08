@@ -11,12 +11,12 @@ const initialSlides: Slide[] = [
   {
     id: '1',
     title: 'From Idea to Prototype',
-    content: 'A guide to using Firebase Studio for rapid development.',
+    content: 'A guide to using **Firebase Studio** for rapid development.',
   },
   {
     id: '2',
     title: 'What is Firebase Studio?',
-    content: 'An AI-assisted development environment to quickly build and deploy web application prototypes.',
+    content: 'An *AI-assisted* development environment to quickly build and deploy web application prototypes.',
   },
   {
     id: '3',
@@ -31,7 +31,7 @@ const initialSlides: Slide[] = [
   {
     id: '5',
     title: 'Beyond the Prototype',
-    content: "A prototype is for learning and validation. It's not production code. Use the insights gained to build a robust V1.",
+    content: "A prototype is for `learning` and `validation`. It's not production code. Use the insights gained to build a robust V1.",
   },
   {
     id: '6',
