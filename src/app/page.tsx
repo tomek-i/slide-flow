@@ -10,7 +10,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { AiSuggestions } from '@/components/ai-suggestions';
 import { cn } from '@/lib/utils';
@@ -38,8 +37,8 @@ const initialSlides: Slide[] = [
   },
   {
     id: '5',
-    title: 'Beyond the Prototype',
-    content: "A prototype is for `learning` and `validation`. It's not production code. Use the insights gained to build a robust V1.",
+    title: 'Why Not Use Prototype Code for Production?',
+    content: "A prototype is for `learning` and `validation`. It's not production code. Use the insights gained to build a robust V1.\n\n- **Scalability:** Prototypes aren't built for large user loads.\n- **Security:** Production apps need robust security measures.\n  - User authentication\n  - Data validation\n- **Maintainability:** Production code needs to be clean and well-documented.",
   },
   {
     id: '6',
