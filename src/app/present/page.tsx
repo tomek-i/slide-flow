@@ -12,18 +12,16 @@ const initialSlides: Slide[] = [
     id: 'intro-1',
     type: 'intro',
     profile: {
-      name: 'Jane Doe',
+      name: 'Tom Iwainski',
       title: 'Senior Software Engineer',
-      company: 'Open Dev Co.',
+      company: 'SSW',
       bio: 'Full-stack engineer passionate about building scalable systems and mentoring junior devs.',
-      techStack: ['JavaScript', 'TypeScript', 'React', 'Node.js', 'GraphQL'],
+      techStack: ['C# .NET', 'TypeScript', 'Node.js', 'Python', 'etc.'],
       socials: {
-        github: 'https://github.com/janedoe',
-        linkedin: 'https://linkedin.com/in/janedoe',
-        website: 'https://janedoe.dev',
-      },
-      location: 'San Francisco, CA',
-      funFact: 'Ran a coding blog that hit 1M views.',
+        github: 'https://github.com/tomek-i',
+        linkedin: 'https://www.linkedin.com/in/tomek-iw/',
+        website: 'https://tomek.au',
+      }
     },
   },
   {

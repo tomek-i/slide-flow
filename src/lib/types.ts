@@ -17,8 +17,8 @@ export type Profile = {
     linkedin: string;
     website: string;
   };
-  location: string;
-  funFact: string;
+  location?: string;
+  funFact?: string;
 };
 
 export type IntroSlide = {
