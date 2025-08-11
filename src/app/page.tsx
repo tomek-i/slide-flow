@@ -1,81 +1,34 @@
-'use client';
+"use client";
 
-import { useState, useMemo, useEffect, useCallback } from 'react';
-import Link from 'next/link';
-import { Plus, Trash2, Presentation as PresentationIcon, ArrowRight, GripVertical, User } from 'lucide-react';
-import { Reorder } from 'framer-motion';
-import type { Slide, ContentSlide, IntroSlide } from '@/lib/types';
-import { useLocalStorage } from '@/hooks/use-local-storage';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { AiSuggestions } from '@/components/ai-suggestions';
-import { cn } from '@/lib/utils';
-import { Label } from '@/components/ui/label';
-
-const initialSlides: Slide[] = [
-  {
-    id: 'intro-1',
-    type: 'intro',
-    profile: {
-      name: 'Jane Doe',
-      title: 'Senior Software Engineer',
-      company: 'Open Dev Co.',
-      bio: 'Full-stack engineer passionate about building scalable systems and mentoring junior devs.',
-      techStack: ['JavaScript', 'TypeScript', 'React', 'Node.js', 'GraphQL'],
-      socials: {
-        github: 'https://github.com/janedoe',
-        linkedin: 'https://linkedin.com/in/janedoe',
-        website: 'https://janedoe.dev',
-      },
-      location: 'San Francisco, CA',
-      funFact: 'Ran a coding blog that hit 1M views.',
-    },
-  },
-  {
-    id: '1',
-    type: 'content',
-    title: 'From Idea to Prototype',
-    content: 'A guide to using **Firebase Studio** for rapid development.',
-  },
-  {
-    id: '2',
-    type: 'content',
-    title: 'What is Firebase Studio?',
-    content: 'An *AI-assisted* development environment to quickly build and deploy web application prototypes.',
-  },
-  {
-    id: '3',
-    type: 'content',
-    title: 'The Core Workflow',
-    content: '1. **Describe:** Explain your app idea in plain English.\n2. **Refine:** Collaborate with AI to tweak the UI and functionality.\n3. **Deploy:** Go live with one click on Firebase Hosting.',
-  },
-  {
-    id: '4',
-    type: 'content',
-    title: 'AI-Powered Features',
-    content: '- UI Generation\n- Component Scaffolding\n- Content Suggestions\n- Data Schema Creation',
-  },
-  {
-    id: '5',
-    type: 'content',
-    title: 'Why Not Use Prototype Code for Production?',
-    content: "A prototype is for `learning` and `validation`. It's not production code. Use the insights gained to build a robust V1.\n\n- **Scalability:** Prototypes aren't built for large user loads.\n- **Security:** Production apps need robust security measures.\n  - User authentication\n  - Data validation\n- **Maintainability:** Production code needs to be clean and well-documented.",
-  },
-  {
-    id: '6',
-    type: 'content',
-    title: 'Thank You',
-    content: 'Questions?',
-  },
-];
-
+import { useState, useMemo, useEffect, useCallback } from "react";
+import Link from "next/link";
+import { Plus, Trash2, Presentation as PresentationIcon, ArrowRight, GripVertical, User } from "lucide-react";
+import { Reorder } from "framer-motion";
+import type { Slide, ContentSlide, IntroSlide } from "@/lib/types";
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { AiSuggestions } from "@/components/ai-suggestions";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { initialSlides } from "@/data/slides";
 
 export default function EditorPage() {
-  const [slides, setSlides] = useLocalStorage<Slide[]>('slides', initialSlides);
+  const [slides, setSlides] = useLocalStorage<Slide[]>("slides", initialSlides);
   const [activeSlideId, setActiveSlideId] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -85,15 +38,15 @@ export default function EditorPage() {
       setActiveSlideId(slides[0].id);
     }
   }, [slides, activeSlideId]);
-  
-  const activeSlide = useMemo(() => slides.find(s => s.id === activeSlideId), [slides, activeSlideId]);
+
+  const activeSlide = useMemo(() => slides.find((s) => s.id === activeSlideId), [slides, activeSlideId]);
 
   const addSlide = () => {
     const newSlide: ContentSlide = {
       id: Date.now().toString(),
-      type: 'content',
-      title: 'New Slide',
-      content: 'Start writing your content here.',
+      type: "content",
+      title: "New Slide",
+      content: "Start writing your content here.",
     };
     const updatedSlides = [...slides, newSlide];
     setSlides(updatedSlides);
@@ -101,31 +54,48 @@ export default function EditorPage() {
   };
 
   const deleteSlide = (idToDelete: string) => {
-    const updatedSlides = slides.filter(s => s.id !== idToDelete);
+    const updatedSlides = slides.filter((s) => s.id !== idToDelete);
     setSlides(updatedSlides);
     if (activeSlideId === idToDelete) {
       setActiveSlideId(updatedSlides.length > 0 ? updatedSlides[0].id : null);
     }
   };
 
-  const updateSlide = useCallback((id: string, updates: Partial<Slide>) => {
-    setSlides(slides.map(s => {
-      if (s.id !== id) return s;
-      if (s.type === 'intro' && updates.type === 'intro') {
-        return { ...s, profile: { ...s.profile, ...updates.profile } };
-      }
-      return { ...s, ...updates };
-    }));
-  }, [slides, setSlides]);
-  
+  const updateSlide = useCallback(
+    (id: string, updates: Partial<Slide>) => {
+      setSlides(
+        slides.map((s) => {
+          if (s.id !== id) return s;
+          if (s.type === "intro") {
+            // Handle intro slide updates
+            const introUpdates = updates as Partial<IntroSlide>;
+            if (introUpdates.profile) {
+              return {
+                ...s,
+                profile: { ...s.profile, ...introUpdates.profile },
+              } as IntroSlide;
+            }
+            return { ...s, ...updates } as IntroSlide;
+          }
+          if (s.type === "content") {
+            // Handle content slide updates
+            return { ...s, ...updates } as ContentSlide;
+          }
+          return s;
+        })
+      );
+    },
+    [slides, setSlides]
+  );
+
   if (!isMounted) {
     return null; // or a loading spinner
   }
-  
+
   const renderEditView = () => {
     if (!activeSlide) return null;
-    
-    if(activeSlide.type === 'intro') {
+
+    if (activeSlide.type === "intro") {
       const slide = activeSlide as IntroSlide;
       return (
         <Card className="h-full w-full shadow-lg">
@@ -135,86 +105,152 @@ export default function EditorPage() {
           <CardContent className="h-[calc(100%-80px)]">
             <ScrollArea className="h-full pr-4">
               <div className="flex flex-col gap-4">
-                <div className='grid grid-cols-2 gap-4'>
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor='name'>Name</Label>
-                    <Input id='name' placeholder="Jane Doe" value={slide.profile.name} onChange={e => updateSlide(slide.id, { type: 'intro', profile: { name: e.target.value } })} />
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                      id="name"
+                      placeholder="Jane Doe"
+                      value={slide.profile.name}
+                      onChange={(e) => updateSlide(slide.id, { profile: { ...slide.profile, name: e.target.value } })}
+                    />
                   </div>
                   <div>
-                    <Label htmlFor='title'>Title</Label>
-                    <Input id='title' placeholder="Senior Software Engineer" value={slide.profile.title} onChange={e => updateSlide(slide.id, { type: 'intro', profile: { title: e.target.value } })} />
+                    <Label htmlFor="title">Title</Label>
+                    <Input
+                      id="title"
+                      placeholder="Senior Software Engineer"
+                      value={slide.profile.title}
+                      onChange={(e) => updateSlide(slide.id, { profile: { ...slide.profile, title: e.target.value } })}
+                    />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor='company'>Company</Label>
-                  <Input id='company' placeholder="Open Dev Co." value={slide.profile.company} onChange={e => updateSlide(slide.id, { type: 'intro', profile: { company: e.target.value } })} />
+                  <Label htmlFor="company">Company</Label>
+                  <Input
+                    id="company"
+                    placeholder="Open Dev Co."
+                    value={slide.profile.company}
+                    onChange={(e) => updateSlide(slide.id, { profile: { ...slide.profile, company: e.target.value } })}
+                  />
                 </div>
                 <div>
-                  <Label htmlFor='bio'>Short Bio</Label>
-                  <Textarea id='bio' placeholder="Full-stack engineer..." value={slide.profile.bio} onChange={e => updateSlide(slide.id, { type: 'intro', profile: { bio: e.target.value } })} />
+                  <Label htmlFor="bio">Short Bio</Label>
+                  <Textarea
+                    id="bio"
+                    placeholder="Full-stack engineer..."
+                    value={slide.profile.bio}
+                    onChange={(e) => updateSlide(slide.id, { profile: { ...slide.profile, bio: e.target.value } })}
+                  />
                 </div>
                 <div>
-                  <Label htmlFor='tech-stack'>Tech Stack (comma-separated)</Label>
-                  <Input id='tech-stack' placeholder="JavaScript, React..." value={slide.profile.techStack.join(', ')} onChange={e => updateSlide(slide.id, { type: 'intro', profile: { techStack: e.target.value.split(',').map(s => s.trim()) } })} />
+                  <Label htmlFor="tech-stack">Tech Stack (comma-separated)</Label>
+                  <Input
+                    id="tech-stack"
+                    placeholder="JavaScript, React..."
+                    value={slide.profile.techStack.join(", ")}
+                    onChange={(e) =>
+                      updateSlide(slide.id, {
+                        profile: { ...slide.profile, techStack: e.target.value.split(",").map((s) => s.trim()) },
+                      })
+                    }
+                  />
                 </div>
-                <div className='grid grid-cols-3 gap-4'>
+                <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor='github'>GitHub URL</Label>
-                    <Input id='github' placeholder="https://github.com/janedoe" value={slide.profile.socials.github} onChange={e => updateSlide(slide.id, { type: 'intro', profile: { socials: {...slide.profile.socials, github: e.target.value} } })} />
+                    <Label htmlFor="github">GitHub URL</Label>
+                    <Input
+                      id="github"
+                      placeholder="https://github.com/janedoe"
+                      value={slide.profile.socials.github}
+                      onChange={(e) =>
+                        updateSlide(slide.id, {
+                          profile: { ...slide.profile, socials: { ...slide.profile.socials, github: e.target.value } },
+                        })
+                      }
+                    />
                   </div>
                   <div>
-                    <Label htmlFor='linkedin'>LinkedIn URL</Label>
-                    <Input id='linkedin' placeholder="https://linkedin.com/in/janedoe" value={slide.profile.socials.linkedin} onChange={e => updateSlide(slide.id, { type: 'intro', profile: { socials: {...slide.profile.socials, linkedin: e.target.value} } })} />
+                    <Label htmlFor="linkedin">LinkedIn URL</Label>
+                    <Input
+                      id="linkedin"
+                      placeholder="https://linkedin.com/in/janedoe"
+                      value={slide.profile.socials.linkedin}
+                      onChange={(e) =>
+                        updateSlide(slide.id, {
+                          profile: {
+                            ...slide.profile,
+                            socials: { ...slide.profile.socials, linkedin: e.target.value },
+                          },
+                        })
+                      }
+                    />
                   </div>
                   <div>
-                    <Label htmlFor='website'>Personal Site URL</Label>
-                    <Input id='website' placeholder="https://janedoe.dev" value={slide.profile.socials.website} onChange={e => updateSlide(slide.id, { type: 'intro', profile: { socials: {...slide.profile.socials, website: e.target.value} } })} />
+                    <Label htmlFor="website">Personal Site URL</Label>
+                    <Input
+                      id="website"
+                      placeholder="https://janedoe.dev"
+                      value={slide.profile.socials.website}
+                      onChange={(e) =>
+                        updateSlide(slide.id, {
+                          profile: { ...slide.profile, socials: { ...slide.profile.socials, website: e.target.value } },
+                        })
+                      }
+                    />
                   </div>
                 </div>
-                 <div>
-                    <Label htmlFor='location'>Location</Label>
-                    <Input id='location' placeholder="San Francisco, CA" value={slide.profile.location} onChange={e => updateSlide(slide.id, { type: 'intro', profile: { location: e.target.value } })} />
-                  </div>
-                 <div>
-                    <Label htmlFor='fun-fact'>Fun Fact</Label>
-                    <Textarea id='fun-fact' placeholder="Ran a coding blog..." value={slide.profile.funFact} onChange={e => updateSlide(slide.id, { type: 'intro', profile: { funFact: e.target.value } })} />
-                  </div>
+                <div>
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    placeholder="San Francisco, CA"
+                    value={slide.profile.location}
+                    onChange={(e) => updateSlide(slide.id, { profile: { ...slide.profile, location: e.target.value } })}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="fun-fact">Fun Fact</Label>
+                  <Textarea
+                    id="fun-fact"
+                    placeholder="Ran a coding blog..."
+                    value={slide.profile.funFact}
+                    onChange={(e) => updateSlide(slide.id, { profile: { ...slide.profile, funFact: e.target.value } })}
+                  />
+                </div>
               </div>
             </ScrollArea>
           </CardContent>
         </Card>
-      )
+      );
     }
-    
+
     const slide = activeSlide as ContentSlide;
     return (
-       <Card className="h-full w-full shadow-lg">
-          <CardHeader className="flex-row items-center justify-between">
-            <CardTitle>Edit Slide</CardTitle>
-            <AiSuggestions
-              topic={slide.title}
-              onSuggestionSelect={(content) => updateSlide(slide.id, { content })}
+      <Card className="h-full w-full shadow-lg">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle>Edit Slide</CardTitle>
+          <AiSuggestions topic={slide.title} onSuggestionSelect={(content) => updateSlide(slide.id, { content })} />
+        </CardHeader>
+        <CardContent className="h-[calc(100%-80px)]">
+          <div className="flex h-full flex-col gap-4">
+            <Input
+              placeholder="Slide Title"
+              value={slide.title}
+              onChange={(e) => updateSlide(slide.id, { title: e.target.value })}
+              className="text-lg font-semibold"
             />
-          </CardHeader>
-          <CardContent className="h-[calc(100%-80px)]">
-            <div className="flex h-full flex-col gap-4">
-              <Input
-                placeholder="Slide Title"
-                value={slide.title}
-                onChange={e => updateSlide(slide.id, { title: e.target.value })}
-                className="text-lg font-semibold"
-              />
-              <Textarea
-                placeholder="Slide Content... (Markdown is supported!)"
-                value={slide.content}
-                onChange={e => updateSlide(slide.id, { content: e.target.value })}
-                className="flex-1 resize-none text-base"
-              />
-            </div>
-          </CardContent>
-        </Card>
+            <Textarea
+              placeholder="Slide Content... (Markdown is supported!)"
+              value={slide.content}
+              onChange={(e) => updateSlide(slide.id, { content: e.target.value })}
+              className="flex-1 resize-none text-base"
+            />
+          </div>
+        </CardContent>
+      </Card>
     );
-  }
+  };
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
@@ -239,26 +275,27 @@ export default function EditorPage() {
             <ScrollArea className="flex-1">
               <Reorder.Group axis="y" values={slides} onReorder={setSlides} className="space-y-2 p-4 pt-0">
                 {slides.map((slide, index) => (
-                  <Reorder.Item
-                    key={slide.id}
-                    value={slide}
-                    className="group relative bg-card rounded-md"
-                  >
+                  <Reorder.Item key={slide.id} value={slide} className="group relative bg-card rounded-md">
                     <div className="flex items-center">
                       <div className="px-2 cursor-grab text-muted-foreground hover:text-foreground">
                         <GripVertical className="h-5 w-5" />
                       </div>
                       <Button
                         variant="ghost"
-                        className={cn("w-full justify-start text-left h-auto py-3 pr-12", slide.id === activeSlideId && "bg-muted hover:bg-muted")}
+                        className={cn(
+                          "w-full justify-start text-left h-auto py-3 pr-12",
+                          slide.id === activeSlideId && "bg-muted hover:bg-muted"
+                        )}
                         onClick={() => setActiveSlideId(slide.id)}
                       >
-                         {slide.type === 'intro' ? (
-                            <User className="h-4 w-4 mr-3 text-primary shrink-0" />
-                          ) : (
-                            <span className="font-semibold text-primary mr-3">{index}.</span>
-                          )}
-                        <span className="truncate flex-1">{slide.type === 'intro' ? slide.profile.name : slide.title}</span>
+                        {slide.type === "intro" ? (
+                          <User className="h-4 w-4 mr-3 text-primary shrink-0" />
+                        ) : (
+                          <span className="font-semibold text-primary mr-3">{index}.</span>
+                        )}
+                        <span className="truncate flex-1">
+                          {slide.type === "intro" ? slide.profile.name : slide.title}
+                        </span>
                       </Button>
                       <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center opacity-0 group-hover:opacity-100 transition-opacity bg-muted z-10 rounded-md">
                         <AlertDialog>
