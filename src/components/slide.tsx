@@ -1,9 +1,9 @@
-import type { Slide } from '@/lib/types';
+import type { ContentSlide } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import ReactMarkdown from 'react-markdown';
 
 interface SlideComponentProps {
-  slide: Slide;
+  slide: ContentSlide;
 }
 
 export function SlideComponent({ slide }: SlideComponentProps) {
@@ -18,7 +18,7 @@ export function SlideComponent({ slide }: SlideComponentProps) {
                 p: ({...props}) => <p className="mb-4 last:mb-0" {...props} />,
                 strong: ({...props}) => <strong className="font-bold" {...props} />,
                 em: ({...props}) => <em className="italic" {...props} />,
-                ul: ({...props}) => <ul className="list-disc list-outside text-left pl-6" {...props} />,
+                ul: ({...props}) => <ul className="list-disc list-outside text-left pl-6 [&_ul]:list-[circle] [&_ul]:ml-4" {...props} />,
                 ol: ({...props}) => <ol className="list-decimal list-outside text-left pl-6" {...props} />,
                 li: ({...props}) => <li className="mb-2" {...props} />,
                 code: ({...props}) => <code className="bg-muted text-primary font-mono rounded-sm px-1 py-0.5" {...props} />,

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Maximize, Minimize, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Confetti from './confetti';
+import { ProfileSlide } from './profile-slide';
 
 interface PresentationProps {
   slides: Slide[];
@@ -78,7 +79,8 @@ export function Presentation({ slides }: PresentationProps) {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
-  const isThankYouSlide = slides[current -1]?.title.toLowerCase().includes('thank you');
+  const currentSlide = slides[current - 1];
+  const isThankYouSlide = currentSlide?.type === 'content' && currentSlide.title.toLowerCase().includes('thank you');
 
   return (
     <div
@@ -91,7 +93,11 @@ export function Presentation({ slides }: PresentationProps) {
         <CarouselContent>
           {slides.map(slide => (
             <CarouselItem key={slide.id} className="h-full w-full">
-              <SlideComponent slide={slide} />
+               {slide.type === 'intro' ? (
+                <ProfileSlide profile={slide.profile} />
+              ) : (
+                <SlideComponent slide={slide} />
+              )}
             </CarouselItem>
           ))}
         </CarouselContent>

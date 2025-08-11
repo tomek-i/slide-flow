@@ -4,37 +4,61 @@
 import { useEffect, useState } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { Presentation } from '@/components/presentation';
-import type { Slide } from '@/lib/types';
+import type { Slide, ContentSlide, IntroSlide } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
 const initialSlides: Slide[] = [
   {
+    id: 'intro-1',
+    type: 'intro',
+    profile: {
+      name: 'Jane Doe',
+      title: 'Senior Software Engineer',
+      company: 'Open Dev Co.',
+      bio: 'Full-stack engineer passionate about building scalable systems and mentoring junior devs.',
+      techStack: ['JavaScript', 'TypeScript', 'React', 'Node.js', 'GraphQL'],
+      socials: {
+        github: 'https://github.com/janedoe',
+        linkedin: 'https://linkedin.com/in/janedoe',
+        website: 'https://janedoe.dev',
+      },
+      location: 'San Francisco, CA',
+      funFact: 'Ran a coding blog that hit 1M views.',
+    },
+  },
+  {
     id: '1',
+    type: 'content',
     title: 'From Idea to Prototype',
     content: 'A guide to using **Firebase Studio** for rapid development.',
   },
   {
     id: '2',
+    type: 'content',
     title: 'What is Firebase Studio?',
     content: 'An *AI-assisted* development environment to quickly build and deploy web application prototypes.',
   },
   {
     id: '3',
+    type: 'content',
     title: 'The Core Workflow',
     content: '1. **Describe:** Explain your app idea in plain English.\n2. **Refine:** Collaborate with AI to tweak the UI and functionality.\n3. **Deploy:** Go live with one click on Firebase Hosting.',
   },
   {
     id: '4',
+    type: 'content',
     title: 'AI-Powered Features',
     content: '- UI Generation\n- Component Scaffolding\n- Content Suggestions\n- Data Schema Creation',
   },
   {
     id: '5',
+    type: 'content',
     title: 'Beyond the Prototype',
     content: "A prototype is for `learning` and `validation`. It's not production code. Use the insights gained to build a robust V1.",
   },
   {
     id: '6',
+    type: 'content',
     title: 'Thank You',
     content: 'Questions?',
   },
