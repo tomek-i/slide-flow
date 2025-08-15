@@ -1,10 +1,10 @@
 "use client";
 
-import type { Profile } from "@/lib/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Github, Linkedin, Globe, MapPin, Sparkles } from "lucide-react";
+import type { Profile } from "@/lib/types";
+import { Github, Globe, Linkedin, Mail, MapPin, Sparkles } from "lucide-react";
 
 interface ProfileSlideProps {
   profile: Profile;
@@ -40,6 +40,15 @@ export function ProfileSlide({ profile }: ProfileSlideProps) {
               </div>
 
               <div className="flex flex-col gap-3 text-sm mt-6">
+                <a
+                  href={`mailto:${profile.socials.email}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Mail className="h-4 w-4" />
+                  <span className="font-mono">{profile.socials.email}</span>
+                </a>
                 <a
                   href={profile.socials.github}
                   target="_blank"

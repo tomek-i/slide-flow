@@ -4,6 +4,12 @@ export type ContentSlide = {
   type: 'content';
   title: string;
   content: string;
+  socials?: {
+    email: string;
+    github: string;
+    linkedin: string;
+    website: string;
+  };
 };
 
 export type Profile = {
@@ -13,6 +19,7 @@ export type Profile = {
   bio: string;
   techStack: string[];
   socials: {
+    email: string;
     github: string;
     linkedin: string;
     website: string;
@@ -25,6 +32,7 @@ export type IntroSlide = {
   id: string;
   type: 'intro';
   profile: Profile;
+  
 };
 
 export type Slide = ContentSlide | IntroSlide;
