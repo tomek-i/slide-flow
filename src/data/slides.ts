@@ -8,8 +8,8 @@ export const initialSlides: Slide[] = [
         name: "Tom (Tomek) Iwainski",
         title: "Senior Software Engineer",
         company: "SSW",
-        bio: "Full-stack engineer passionate about building scalable systems and mentoring junior devs.",
-        techStack: ["TypeScript", "Node.js", "C# .NET", "Python", "etc."],
+        bio: "Full-stack engineer passionate about AI,Software Development and mentoring (junior) devs.",
+        techStack: ["C# .NET", "TypeScript", "Node.js",  "Python", "C/C++" "etc."],
         socials: {
           github: "https://github.com/tomek-i",
           linkedin: "https://www.linkedin.com/in/tomek-iw/",
@@ -20,7 +20,7 @@ export const initialSlides: Slide[] = [
     {
       id: "1",
       title: "From Idea to Prototype",
-      content: "Turning concepts into reality — the smart way",
+      content: "Turning concepts into reality — the AI way",
       type: "content",
     },
     {
@@ -32,7 +32,7 @@ export const initialSlides: Slide[] = [
     },
     {
       id: "2",
-      title: "The Firebase Studio Approach",
+      title: "The AI Approach",
       content:
         "1. **Prompt** – Describe your app idea in natural language\n2. **Blueprint** – Auto-generated app structure & screens\n3. **AI Assistant** – Adjust logic, connect to data\n4. **Code View** – Fine-tune if you’re technical\n5. **Preview & Test** – Click around, collect feedback",
       type: "content",
@@ -64,6 +64,12 @@ export const initialSlides: Slide[] = [
       content:
         "✅ Do\n* Keep it simple and focused\n* Use it to test ideas, not ship to production\n* Throw away bad ideas quickly\n* Document what worked and what didn’t\n\n❌ Don’t\n* Use prototype code as your production base\n* Skip planning (“just building” wastes time)\n* Over-engineer early\n* Ignore feedback",
       type: "content",
+    },    {
+      id: "7",
+      title: "DEMO",
+      content:
+        "",
+        type: "content",
     },
     {
       id: "1754615436848",
