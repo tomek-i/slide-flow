@@ -15,7 +15,6 @@ export type ContentSlide = {
 export type Profile = {
   name: string;
   title: string;
-  company: string;
   bio: string;
   techStack: string[];
   socials: {

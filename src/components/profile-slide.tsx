@@ -24,7 +24,7 @@ export function ProfileSlide({ profile }: ProfileSlideProps) {
             <div className="flex-1">
               <h1 className="text-5xl font-bold text-primary">{profile.name}</h1>
               <p className="text-2xl font-semibold text-foreground/80 mt-1">
-                {profile.title} at {profile.company}
+                {profile.title}
               </p>
               <p className="text-lg text-muted-foreground mt-4 italic">"{profile.bio}"</p>
 

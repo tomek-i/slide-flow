@@ -5,9 +5,8 @@ export const initialSlides: Slide[] = [
       id: "1754871819870",
       type: "intro",
       profile: {
-        name: "Tom I.",
+        name: "Tom Iwainski",
         title: "Senior Software Engineer",
-        company: "SSW",
         bio: "Full-stack engineer passionate about AI, Software Development and mentoring.",
         techStack: ["C# .NET", "TypeScript", "Node.js",  "Python", "C/C++", "etc."],
         socials: {

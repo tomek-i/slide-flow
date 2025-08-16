@@ -126,15 +126,6 @@ export default function EditorPage() {
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="company">Company</Label>
-                  <Input
-                    id="company"
-                    placeholder="Open Dev Co."
-                    value={slide.profile.company}
-                    onChange={(e) => updateSlide(slide.id, { profile: { ...slide.profile, company: e.target.value } })}
-                  />
-                </div>
-                <div>
                   <Label htmlFor="bio">Short Bio</Label>
                   <Textarea
                     id="bio"
@@ -143,7 +134,7 @@ export default function EditorPage() {
                     onChange={(e) => updateSlide(slide.id, { profile: { ...slide.profile, bio: e.target.value } })}
                   />
                 </div>
-                <div>
+                {/* <div>
                   <Label htmlFor="tech-stack">Tech Stack (comma-separated)</Label>
                   <Input
                     id="tech-stack"
@@ -155,7 +146,7 @@ export default function EditorPage() {
                       })
                     }
                   />
-                </div>
+                </div> */}
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <Label htmlFor="github">GitHub URL</Label>
